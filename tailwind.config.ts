@@ -70,7 +70,15 @@ export default {
 					green: '#10B981',
 					lightgreen: '#D1FAE5',
 					navy: '#1F2937',
-					lightgray: '#F9FAFB'
+					lightgray: '#F9FAFB',
+					threads: {
+						bg: '#101010',
+						card: '#1A1F2C',
+						text: '#F1F5F9',
+						muted: '#8E9196',
+						accent: '#1EAEDB',
+						border: '#222222'
+					}
 				}
 			},
 			borderRadius: {
