@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import StarRating from "@/components/StarRating";
 import {
   Search,
   ChevronDown,
@@ -16,6 +17,8 @@ import {
   MessageSquare,
   Calendar,
   FileCheck,
+  ArrowRight,
+  Globe,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -116,48 +119,59 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative bg-gigconnect-purple text-white py-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gigconnect-purple to-gigconnect-darkpurple"></div>
-        <div className="container mx-auto relative z-10">
-          <div className="max-w-2xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+      {/* Hero Section - Apple Style */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-gigconnect-purple/10 to-transparent dark:from-gigconnect-purple/5">
+        <div className="absolute inset-0 bg-[url('/blur-bg.svg')] bg-no-repeat bg-cover opacity-30"></div>
+        
+        <div className="container mx-auto pt-20 pb-32 px-4 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 py-1.5 px-6 text-sm bg-white/10 text-gigconnect-purple dark:text-gigconnect-lightpurple backdrop-blur-lg border border-gigconnect-purple/20">
+              Un nouvel espace pour les freelances
+            </Badge>
+            
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-gigconnect-purple to-gigconnect-darkpurple bg-clip-text text-transparent tracking-tight leading-tight">
               Connectez vos talents aux meilleurs projets
             </h1>
-            <p className="text-lg md:text-xl mb-8 text-white/80">
+            
+            <p className="text-xl md:text-2xl mb-10 text-gigconnect-threads-text/80 leading-relaxed max-w-3xl mx-auto">
               La plateforme qui réunit freelances et clients pour des collaborations
               réussies dans l'univers du digital.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-gigconnect-purple hover:bg-white/90">
-                Je suis un Freelance
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button size="lg" className="rounded-full bg-gigconnect-purple hover:bg-gigconnect-purple/90 text-lg px-8 shadow-lg shadow-gigconnect-purple/25 hover:shadow-gigconnect-purple/40 transition-all duration-300">
+                Je suis un Freelance <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button className="bg-gigconnect-navy hover:bg-opacity-90">
+              <Button size="lg" variant="outline" className="rounded-full border-gigconnect-purple/30 hover:border-gigconnect-purple text-gigconnect-purple dark:text-gigconnect-lightpurple hover:bg-gigconnect-purple/5 text-lg px-8">
                 Je recherche un Freelance
               </Button>
             </div>
           </div>
           
-          <div className="mt-12 max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-2">
+          {/* Search Section with Glassmorphism */}
+          <div className="mt-16 max-w-4xl mx-auto backdrop-blur-xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-3xl shadow-xl p-6">
             <Tabs defaultValue="freelance" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-2">
-                <TabsTrigger value="freelance">Trouver un Freelance</TabsTrigger>
-                <TabsTrigger value="project">Trouver un Projet</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 mb-6 bg-black/10 dark:bg-white/5 rounded-xl p-1 border border-white/10">
+                <TabsTrigger value="freelance" className="rounded-lg py-3 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
+                  Trouver un Freelance
+                </TabsTrigger>
+                <TabsTrigger value="project" className="rounded-lg py-3 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
+                  Trouver un Projet
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="freelance" className="p-2">
-                <div className="flex flex-col md:flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-4">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="text"
                       placeholder="Rechercher une compétence ou un service..."
-                      className="landing-input pl-10 w-full"
+                      className="landing-input pl-12 w-full py-4 bg-white/5 border border-white/10 rounded-xl text-base"
                     />
                   </div>
                   <div className="relative w-full md:w-56">
-                    <select className="landing-input w-full appearance-none pr-8">
+                    <select className="landing-input w-full appearance-none pr-10 py-4 bg-white/5 border border-white/10 rounded-xl text-base">
                       <option value="">Toutes catégories</option>
                       <option value="design">Design & Créatif</option>
                       <option value="dev">Développement</option>
@@ -165,42 +179,71 @@ const Index = () => {
                       <option value="writing">Rédaction</option>
                       <option value="video">Vidéo & Animation</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                    <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
-                  <Button className="bg-gigconnect-green hover:bg-gigconnect-green/90">
+                  <Button className="bg-gigconnect-green hover:bg-gigconnect-green/90 rounded-xl py-6 px-8 text-base">
                     Rechercher
                   </Button>
                 </div>
               </TabsContent>
               
               <TabsContent value="project" className="p-2">
-                <div className="flex flex-col md:flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-4">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                     <input
                       type="text"
                       placeholder="Rechercher un projet ou une mission..."
-                      className="landing-input pl-10 w-full"
+                      className="landing-input pl-12 w-full py-4 bg-white/5 border border-white/10 rounded-xl text-base"
                     />
                   </div>
                   <div className="relative w-full md:w-56">
-                    <select className="landing-input w-full appearance-none pr-8">
+                    <select className="landing-input w-full appearance-none pr-10 py-4 bg-white/5 border border-white/10 rounded-xl text-base">
                       <option value="">Budget</option>
                       <option value="small">Moins de 500€</option>
                       <option value="medium">500€ - 2000€</option>
                       <option value="large">Plus de 2000€</option>
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                    <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
-                  <Button className="bg-gigconnect-green hover:bg-gigconnect-green/90">
+                  <Button className="bg-gigconnect-green hover:bg-gigconnect-green/90 rounded-xl py-6 px-8 text-base">
                     Rechercher
                   </Button>
                 </div>
               </TabsContent>
             </Tabs>
+            
+            {/* Statistiques en style Apple */}
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-white/10">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gigconnect-purple">10k+</p>
+                <p className="text-sm text-muted-foreground">Freelances</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gigconnect-purple">5k+</p>
+                <p className="text-sm text-muted-foreground">Clients satisfaits</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gigconnect-purple">8k+</p>
+                <p className="text-sm text-muted-foreground">Projets réalisés</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-gigconnect-purple">15+</p>
+                <p className="text-sm text-muted-foreground">Pays</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce">
+            <p className="text-sm text-muted-foreground mb-2">Découvrir</p>
+            <div className="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center pt-2">
+              <div className="w-1 h-2 bg-muted-foreground rounded-full"></div>
+            </div>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent"></div>
+        
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent"></div>
       </section>
       
       {/* Freelances Section */}
@@ -274,8 +317,7 @@ const Index = () => {
                     <p className="text-sm text-muted-foreground mb-2">{freelance.title}</p>
                     
                     <div className="flex items-center mb-3">
-                      <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                      <span className="ml-1 text-sm font-medium">{freelance.rating}</span>
+                      <StarRating rating={freelance.rating} size="sm" />
                       <span className="mx-1 text-muted-foreground text-sm">
                         ({freelance.reviews} avis)
                       </span>
