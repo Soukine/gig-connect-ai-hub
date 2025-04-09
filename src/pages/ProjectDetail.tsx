@@ -1,11 +1,10 @@
-
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { 
   Calendar, Clock, DollarSign, Bookmark, Share2, Shield, 
-  FileText, Users, MapPin, Building, CheckSquare, Award
+  FileText, Users, MapPin, Building, CheckSquare, Award, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,8 +16,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import StarRating from "@/components/StarRating";
 
-// Données fictives pour le projet
 const projectData = {
   id: 1,
   title: "Refonte complète d'un site e-commerce",
@@ -224,7 +223,7 @@ const ProjectDetail = () => {
                               <p className="font-medium">{proposal.freelancer.name}</p>
                               <p className="text-sm text-gigconnect-threads-muted">{proposal.freelancer.title}</p>
                               <div className="flex items-center mt-1">
-                                <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                                <StarRating rating={proposal.freelancer.rating} size="sm" />
                                 <span className="ml-1 text-sm">{proposal.freelancer.rating}</span>
                               </div>
                             </div>

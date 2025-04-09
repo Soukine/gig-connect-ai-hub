@@ -29,7 +29,7 @@ const StarRating = ({
   };
   
   return (
-    <div className="flex">
+    <div className="flex items-center">
       {[...Array(maxRating)].map((_, index) => (
         <Star
           key={index}

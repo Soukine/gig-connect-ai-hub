@@ -108,7 +108,7 @@ const PostProject = () => {
         min: "",
         max: "",
       },
-      termsAccepted: false,
+      termsAccepted: false as unknown as true, // This fix uses type assertion
     },
   });
   

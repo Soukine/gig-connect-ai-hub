@@ -1,10 +1,9 @@
-
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { 
-  Star, MessageSquare, ThumbsUp, Share2, Bookmark, 
+  MessageSquare, ThumbsUp, Share2, Bookmark, 
   Send, Calendar, CheckCircle, Award, MapPin, User, Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,8 +17,8 @@ import {
   Tabs, TabsContent, TabsList, TabsTrigger 
 } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import StarRating from "@/components/StarRating";
 
-// Données fictives pour le profil
 const freelanceData = {
   id: 2,
   name: "Thomas Dubois",
@@ -29,7 +28,7 @@ const freelanceData = {
   memberSince: "Mai 2023",
   verified: true,
   rating: 4.7,
-  reviews: 89,
+  reviewCount: 89,
   completedProjects: 47,
   bio: "Développeur passionné avec plus de 5 ans d'expérience dans la création d'applications web performantes et évolutives. Spécialisé en React, Node.js et MongoDB avec une forte expertise en architecture logicielle.",
   expertise: ["React", "Node.js", "MongoDB", "TypeScript", "GraphQL", "Firebase", "AWS", "UI/UX"],
@@ -77,7 +76,7 @@ const freelanceData = {
       description: "Création d'APIs RESTful ou GraphQL avec Node.js et Express."
     }
   ],
-  reviews: [
+  reviewItems: [
     {
       id: 1,
       clientName: "Marie Laurent",
@@ -130,7 +129,6 @@ const FreelanceProfile = () => {
       <Navbar />
       
       <div className="container mx-auto px-4 py-8 threads-layout">
-        {/* En-tête du profil */}
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex-shrink-0">
             <Avatar className="threads-avatar h-32 w-32 md:h-40 md:w-40">
@@ -178,8 +176,8 @@ const FreelanceProfile = () => {
                 <span>Membre depuis {freelanceData.memberSince}</span>
               </div>
               <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 text-yellow-400" />
-                <span>{freelanceData.rating} ({freelanceData.reviews} avis)</span>
+                <StarRating rating={freelanceData.rating} size="sm" />
+                <span className="ml-1">{freelanceData.rating} ({freelanceData.reviewCount} avis)</span>
               </div>
               <div className="flex items-center gap-1">
                 <CheckCircle className="h-4 w-4 text-green-500" />
@@ -200,7 +198,6 @@ const FreelanceProfile = () => {
           </div>
         </div>
         
-        {/* Contenu principal */}
         <div className="mt-10">
           <Tabs defaultValue="about" className="w-full">
             <TabsList className="w-full bg-gigconnect-threads-card border-b border-gigconnect-threads-border mb-6">
@@ -335,22 +332,15 @@ const FreelanceProfile = () => {
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle>Évaluation globale</CardTitle>
                   <div className="flex items-center gap-2">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          className={`h-5 w-5 ${i < Math.floor(freelanceData.rating) ? "text-yellow-400 fill-yellow-400" : "text-gigconnect-threads-muted"}`}
-                        />
-                      ))}
-                    </div>
+                    <StarRating rating={freelanceData.rating} />
                     <span className="font-bold">{freelanceData.rating}</span>
-                    <span className="text-gigconnect-threads-muted">({freelanceData.reviews} avis)</span>
+                    <span className="text-gigconnect-threads-muted">({freelanceData.reviewCount} avis)</span>
                   </div>
                 </CardHeader>
               </Card>
               
               <div className="space-y-4">
-                {freelanceData.reviews.map((review) => (
+                {freelanceData.reviewItems.map((review) => (
                   <Card key={review.id} className="bg-gigconnect-threads-card border-gigconnect-threads-border">
                     <CardHeader>
                       <div className="flex justify-between items-start">
@@ -365,14 +355,7 @@ const FreelanceProfile = () => {
                             <p className="text-sm text-gigconnect-threads-muted">{review.date}</p>
                           </div>
                         </div>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gigconnect-threads-muted"}`}
-                            />
-                          ))}
-                        </div>
+                        <StarRating rating={review.rating} size="sm" />
                       </div>
                     </CardHeader>
                     <CardContent>
