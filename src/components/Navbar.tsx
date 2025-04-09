@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,13 +14,15 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { CommandDialog, CommandInput, Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const isMobile = useIsMobile();
   
   return (
-    <header className="sticky top-0 z-50 w-full bg-background border-b">
+    <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md border-b">
       <nav className="container mx-auto flex items-center justify-between py-4">
         {/* Logo */}
         <div className="flex items-center">
@@ -33,17 +34,17 @@ export const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Search Trigger */}
         {!isMobile && (
           <div className="hidden md:flex flex-1 justify-center px-4">
-            <div className="relative w-full max-w-md">
-              <input
-                type="text"
-                placeholder="Rechercher des talents ou des projets..."
-                className="landing-input pl-10"
-              />
+            <Button 
+              variant="outline" 
+              className="relative w-full max-w-md h-10 justify-start pl-10 text-muted-foreground border border-input rounded-lg"
+              onClick={() => setSearchOpen(true)}
+            >
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            </div>
+              <span>Rechercher des talents ou des projets...</span>
+            </Button>
           </div>
         )}
 
@@ -91,14 +92,18 @@ export const Navbar = () => {
       {isMobile && mobileMenuOpen && (
         <div className="fixed inset-0 top-[65px] z-40 flex flex-col gap-4 bg-background p-4 md:hidden animate-fade-in">
           <div className="flex flex-col space-y-4">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Rechercher des talents ou des projets..."
-                className="landing-input pl-10"
-              />
+            {/* Mobile Search Button */}
+            <Button 
+              variant="outline" 
+              className="relative w-full h-10 justify-start pl-10 text-muted-foreground border border-input rounded-lg"
+              onClick={() => {
+                setSearchOpen(true);
+                setMobileMenuOpen(false);
+              }}
+            >
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            </div>
+              <span>Rechercher...</span>
+            </Button>
 
             <Link 
               to="/" 
@@ -160,6 +165,40 @@ export const Navbar = () => {
           </div>
         </div>
       )}
+
+      {/* Command Dialog (Search) */}
+      <CommandDialog open={searchOpen} onOpenChange={setSearchOpen}>
+        <Command className="rounded-lg border shadow-md">
+          <CommandInput placeholder="Rechercher des talents ou des projets..." />
+          <CommandList>
+            <CommandEmpty>Aucun résultat trouvé.</CommandEmpty>
+            <CommandGroup heading="Talents populaires">
+              <CommandItem>
+                <div className="flex items-center">
+                  <Avatar className="h-6 w-6 mr-2">
+                    <AvatarFallback>SM</AvatarFallback>
+                  </Avatar>
+                  <span>Sophie Martin</span>
+                </div>
+                <span className="ml-2 text-xs text-muted-foreground">Designer UX/UI</span>
+              </CommandItem>
+              <CommandItem>
+                <div className="flex items-center">
+                  <Avatar className="h-6 w-6 mr-2">
+                    <AvatarFallback>TD</AvatarFallback>
+                  </Avatar>
+                  <span>Thomas Dubois</span>
+                </div>
+                <span className="ml-2 text-xs text-muted-foreground">Développeur Full Stack</span>
+              </CommandItem>
+            </CommandGroup>
+            <CommandGroup heading="Projets récents">
+              <CommandItem>Refonte complète d'un site e-commerce</CommandItem>
+              <CommandItem>Création d'identité visuelle pour startup</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </CommandDialog>
     </header>
   );
 };
