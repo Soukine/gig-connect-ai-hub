@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ import {
   ArrowRight,
   Globe,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -114,6 +115,65 @@ const featuredProjects = [
 
 const Index = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedBudget, setSelectedBudget] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleSearch = (type: string) => {
+    if (type === "freelance") {
+      toast({
+        title: "Recherche de freelances",
+        description: `Recherche: ${searchQuery || "Tous"}, Catégorie: ${selectedCategory || "Toutes"}`,
+      });
+      navigate("/explore", { 
+        state: { 
+          query: searchQuery, 
+          category: selectedCategory 
+        } 
+      });
+    } else {
+      toast({
+        title: "Recherche de projets",
+        description: `Recherche: ${searchQuery || "Tous"}, Budget: ${selectedBudget || "Tous"}`,
+      });
+      navigate("/jobs", { 
+        state: { 
+          query: searchQuery, 
+          budget: selectedBudget 
+        } 
+      });
+    }
+  };
+  
+  const handleFreelanceSignup = () => {
+    navigate("/auth", { state: { role: "freelance" } });
+  };
+  
+  const handleClientSignup = () => {
+    navigate("/auth", { state: { role: "client" } });
+  };
+  
+  const handleContactFreelance = (id: number) => {
+    toast({
+      title: "Contacter le freelance",
+      description: "Pour contacter ce freelance, veuillez vous connecter ou créer un compte",
+    });
+    navigate(`/freelance/${id}`);
+  };
+  
+  const handleSeeMoreFreelances = () => {
+    navigate("/explore");
+  };
+  
+  const handleSeeMoreProjects = () => {
+    navigate("/jobs");
+  };
+  
+  const handleStartNow = () => {
+    navigate("/auth");
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -139,16 +199,25 @@ const Index = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button size="lg" className="rounded-full bg-gigconnect-purple hover:bg-gigconnect-purple/90 text-lg px-8 shadow-lg shadow-gigconnect-purple/25 hover:shadow-gigconnect-purple/40 transition-all duration-300">
+              <Button 
+                size="lg" 
+                className="rounded-full bg-gigconnect-purple hover:bg-gigconnect-purple/90 text-lg px-8 shadow-lg shadow-gigconnect-purple/25 hover:shadow-gigconnect-purple/40 transition-all duration-300"
+                onClick={handleFreelanceSignup}
+              >
                 Je suis un Freelance <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full border-gigconnect-purple/30 hover:border-gigconnect-purple text-gigconnect-purple dark:text-gigconnect-lightpurple hover:bg-gigconnect-purple/5 text-lg px-8">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="rounded-full border-gigconnect-purple/30 hover:border-gigconnect-purple text-gigconnect-purple dark:text-gigconnect-lightpurple hover:bg-gigconnect-purple/5 text-lg px-8"
+                onClick={handleClientSignup}
+              >
                 Je recherche un Freelance
               </Button>
             </div>
           </div>
           
-          {/* Search Section with Glassmorphism - CORRECTED */}
+          {/* Search Section with Glassmorphism */}
           <div className="mt-16 max-w-4xl mx-auto backdrop-blur-xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-3xl shadow-xl p-6">
             <Tabs defaultValue="freelance" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-black/10 dark:bg-white/5 rounded-xl p-1 border border-white/10">
@@ -168,10 +237,16 @@ const Index = () => {
                       type="text"
                       placeholder="Rechercher une compétence ou un service..."
                       className="landing-input pl-12 w-full h-14 bg-white/5 border border-white/10 rounded-xl text-base"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
                   <div className="relative w-full md:w-56">
-                    <select className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base">
+                    <select 
+                      className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
                       <option value="">Toutes catégories</option>
                       <option value="design">Design & Créatif</option>
                       <option value="dev">Développement</option>
@@ -181,7 +256,10 @@ const Index = () => {
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
-                  <Button className="bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base">
+                  <Button 
+                    className="bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base"
+                    onClick={() => handleSearch("freelance")}
+                  >
                     Rechercher
                   </Button>
                 </div>
@@ -195,10 +273,16 @@ const Index = () => {
                       type="text"
                       placeholder="Rechercher un projet ou une mission..."
                       className="landing-input pl-12 w-full h-14 bg-white/5 border border-white/10 rounded-xl text-base"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
                   <div className="relative w-full md:w-56">
-                    <select className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base">
+                    <select 
+                      className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base"
+                      value={selectedBudget}
+                      onChange={(e) => setSelectedBudget(e.target.value)}
+                    >
                       <option value="">Budget</option>
                       <option value="small">Moins de 500€</option>
                       <option value="medium">500€ - 2000€</option>
@@ -206,7 +290,10 @@ const Index = () => {
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
-                  <Button className="bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base">
+                  <Button 
+                    className="bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base"
+                    onClick={() => handleSearch("project")}
+                  >
                     Rechercher
                   </Button>
                 </div>
@@ -339,7 +426,15 @@ const Index = () => {
                     
                     <div className="pt-3 border-t flex justify-between items-center">
                       <span className="text-sm font-medium">{freelance.price}</span>
-                      <Button size="sm" variant="ghost" className="text-gigconnect-purple">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-gigconnect-purple"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleContactFreelance(freelance.id);
+                        }}
+                      >
                         <MessageSquare className="h-4 w-4 mr-1" /> Contacter
                       </Button>
                     </div>
@@ -351,7 +446,11 @@ const Index = () => {
         </div>
         
         <div className="mt-10 text-center">
-          <Button variant="outline" className="border-gigconnect-purple text-gigconnect-purple">
+          <Button 
+            variant="outline" 
+            className="border-gigconnect-purple text-gigconnect-purple"
+            onClick={handleSeeMoreFreelances}
+          >
             Voir plus de freelances
           </Button>
         </div>
@@ -413,7 +512,11 @@ const Index = () => {
           </div>
           
           <div className="mt-10 text-center">
-            <Button variant="outline" className="border-gigconnect-purple text-gigconnect-purple">
+            <Button 
+              variant="outline" 
+              className="border-gigconnect-purple text-gigconnect-purple"
+              onClick={handleSeeMoreProjects}
+            >
               Voir plus de projets
             </Button>
           </div>
@@ -474,7 +577,10 @@ const Index = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <Button className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple">
+          <Button 
+            className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple"
+            onClick={handleStartNow}
+          >
             Commencer maintenant
           </Button>
         </div>
@@ -490,10 +596,17 @@ const Index = () => {
             Rejoignez GigConnect dès aujourd'hui et connectez-vous avec des clients à la recherche de vos compétences.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gigconnect-purple hover:bg-gigconnect-purple/90">
+            <Button 
+              className="bg-gigconnect-purple hover:bg-gigconnect-purple/90"
+              onClick={() => navigate("/auth", { state: { signupMode: true } })}
+            >
               S'inscrire gratuitement
             </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-gigconnect-navy">
+            <Button 
+              variant="outline" 
+              className="border-white text-white hover:bg-white hover:text-gigconnect-navy"
+              onClick={() => navigate("/explore")}
+            >
               En savoir plus
             </Button>
           </div>

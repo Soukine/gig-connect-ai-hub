@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";
+
+import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -83,6 +84,7 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const [bookmarked, setBookmarked] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const handleBookmark = () => {
     setBookmarked(!bookmarked);
@@ -101,9 +103,28 @@ const ProjectDetail = () => {
   };
   
   const handleProposal = () => {
+    // Check if user is logged in - assuming not logged in for this demo
+    navigate("/auth", { 
+      state: { 
+        returnUrl: `/project/${id}`,
+        action: "proposal" 
+      } 
+    });
+    
     toast({
-      title: "Envoi de proposition",
-      description: "Votre proposition a été envoyée avec succès",
+      title: "Connexion requise",
+      description: "Veuillez vous connecter ou créer un compte pour soumettre une proposition",
+    });
+  };
+
+  const handleProfileClick = (freelancerId: number) => {
+    navigate(`/freelance/${freelancerId}`);
+  };
+  
+  const handleReportProject = () => {
+    toast({
+      title: "Signalement",
+      description: "Merci pour votre signalement. Notre équipe va examiner ce projet.",
     });
   };
 
@@ -191,6 +212,10 @@ const ProjectDetail = () => {
                         <Badge 
                           key={index} 
                           className="bg-gigconnect-threads-accent/20 text-gigconnect-threads-accent hover:bg-gigconnect-threads-accent/30"
+                          onClick={() => {
+                            navigate("/explore", { state: { skill } });
+                          }}
+                          style={{ cursor: "pointer" }}
                         >
                           {skill}
                         </Badge>
@@ -211,7 +236,11 @@ const ProjectDetail = () => {
                   <CardContent className="space-y-4">
                     {projectData.proposals.length > 0 ? (
                       projectData.proposals.map((proposal) => (
-                        <div key={proposal.id} className="flex items-center justify-between p-4 border border-gigconnect-threads-border rounded-md">
+                        <div 
+                          key={proposal.id} 
+                          className="flex items-center justify-between p-4 border border-gigconnect-threads-border rounded-md cursor-pointer hover:bg-gigconnect-threads-card/80"
+                          onClick={() => handleProfileClick(proposal.freelancer.id)}
+                        >
                           <div className="flex items-center gap-3">
                             <Avatar>
                               <AvatarImage src={proposal.freelancer.avatar} />
@@ -251,7 +280,10 @@ const ProjectDetail = () => {
             </Tabs>
             
             <div className="mt-8">
-              <Button className="threads-button w-full">
+              <Button 
+                className="threads-button w-full"
+                onClick={handleProposal}
+              >
                 Soumettre une proposition
               </Button>
               <p className="text-sm text-gigconnect-threads-muted mt-2 text-center">
@@ -353,7 +385,11 @@ const ProjectDetail = () => {
             </Card>
             
             <div className="text-center">
-              <Button variant="outline" className="w-full border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-card">
+              <Button 
+                variant="outline" 
+                className="w-full border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-card"
+                onClick={handleReportProject}
+              >
                 Signaler ce projet
               </Button>
             </div>

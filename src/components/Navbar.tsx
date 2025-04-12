@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Search,
@@ -16,11 +16,38 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { CommandDialog, CommandInput, Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import { useToast } from "@/hooks/use-toast";
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handlePublishClick = () => {
+    navigate("/post-project");
+  };
+  
+  const handleNotificationClick = () => {
+    toast({
+      title: "Notifications",
+      description: "Aucune nouvelle notification pour le moment",
+    });
+  };
+  
+  const handleMessageClick = () => {
+    navigate("/messages");
+  };
+  
+  const handleSearchResultClick = (path: string) => {
+    setSearchOpen(false);
+    navigate(path);
+  };
+  
+  const handleLoginClick = () => {
+    navigate("/auth");
+  };
   
   return (
     <header className="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md border-b">
@@ -51,12 +78,21 @@ export const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="relative">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="relative"
+            onClick={handleNotificationClick}
+          >
             <Bell className="h-5 w-5" />
             <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-gigconnect-green"></span>
           </Button>
 
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={handleMessageClick}
+          >
             <MessageSquare className="h-5 w-5" />
           </Button>
 
@@ -70,7 +106,11 @@ export const Navbar = () => {
           </Link>
 
           <div className="flex items-center space-x-2">
-            <Button size="sm" className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple">
+            <Button 
+              size="sm" 
+              className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple"
+              onClick={handlePublishClick}
+            >
               Publier
             </Button>
           </div>
@@ -142,23 +182,39 @@ export const Navbar = () => {
               <span>Messages</span>
             </Link>
 
-            <Link 
-              to="/notifications" 
-              className="flex items-center space-x-2 p-2 rounded-md hover:bg-muted"
-              onClick={() => setMobileMenuOpen(false)}
+            <Button 
+              variant="ghost"
+              className="flex items-center justify-start space-x-2 p-2 rounded-md hover:bg-muted"
+              onClick={() => {
+                handleNotificationClick();
+                setMobileMenuOpen(false);
+              }}
             >
               <Bell className="h-5 w-5" />
               <span>Notifications</span>
-            </Link>
+            </Button>
 
             <div className="mt-4">
-              <Button className="w-full bg-gigconnect-purple hover:bg-gigconnect-darkpurple">
+              <Button 
+                className="w-full bg-gigconnect-purple hover:bg-gigconnect-darkpurple"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/post-project");
+                }}
+              >
                 Publier une annonce
               </Button>
             </div>
             
             <div className="mt-2">
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleLoginClick();
+                }}
+              >
                 <UserPlus className="mr-2 h-4 w-4" />
                 S'inscrire / Se connecter
               </Button>
@@ -174,7 +230,7 @@ export const Navbar = () => {
           <CommandList>
             <CommandEmpty>Aucun résultat trouvé.</CommandEmpty>
             <CommandGroup heading="Talents populaires">
-              <CommandItem>
+              <CommandItem onSelect={() => handleSearchResultClick("/freelance/1")}>
                 <div className="flex items-center">
                   <Avatar className="h-6 w-6 mr-2">
                     <AvatarFallback>SM</AvatarFallback>
@@ -183,7 +239,7 @@ export const Navbar = () => {
                 </div>
                 <span className="ml-2 text-xs text-muted-foreground">Designer UX/UI</span>
               </CommandItem>
-              <CommandItem>
+              <CommandItem onSelect={() => handleSearchResultClick("/freelance/2")}>
                 <div className="flex items-center">
                   <Avatar className="h-6 w-6 mr-2">
                     <AvatarFallback>TD</AvatarFallback>
@@ -194,8 +250,8 @@ export const Navbar = () => {
               </CommandItem>
             </CommandGroup>
             <CommandGroup heading="Projets récents">
-              <CommandItem>Refonte complète d'un site e-commerce</CommandItem>
-              <CommandItem>Création d'identité visuelle pour startup</CommandItem>
+              <CommandItem onSelect={() => handleSearchResultClick("/project/1")}>Refonte complète d'un site e-commerce</CommandItem>
+              <CommandItem onSelect={() => handleSearchResultClick("/project/2")}>Création d'identité visuelle pour startup</CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>
