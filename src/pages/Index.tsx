@@ -152,10 +152,10 @@ const Index = () => {
           <div className="mt-16 max-w-4xl mx-auto backdrop-blur-xl bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10 rounded-3xl shadow-xl p-6">
             <Tabs defaultValue="freelance" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-black/10 dark:bg-white/5 rounded-xl p-1 border border-white/10">
-                <TabsTrigger value="freelance" className="rounded-lg py-3 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
+                <TabsTrigger value="freelance" className="rounded-lg py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
                   Trouver un Freelance
                 </TabsTrigger>
-                <TabsTrigger value="project" className="rounded-lg py-3 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
+                <TabsTrigger value="project" className="rounded-lg py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base">
                   Trouver un Projet
                 </TabsTrigger>
               </TabsList>
@@ -171,7 +171,7 @@ const Index = () => {
                     />
                   </div>
                   <div className="relative w-full md:w-56">
-                    <select className="landing-input w-full appearance-none pr-10 py-4 h-14 bg-white/5 border border-white/10 rounded-xl text-base">
+                    <select className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base">
                       <option value="">Toutes catégories</option>
                       <option value="design">Design & Créatif</option>
                       <option value="dev">Développement</option>
