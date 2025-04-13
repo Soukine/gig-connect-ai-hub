@@ -96,14 +96,18 @@ export const Navbar = () => {
             <MessageSquare className="h-5 w-5" />
           </Button>
 
-          <Link to="/profile">
+          <Button
+            variant="ghost"
+            className="p-0"
+            onClick={() => navigate("/profile")}
+          >
             <Avatar className="h-8 w-8">
               <AvatarImage src="" alt="@user" />
               <AvatarFallback className="bg-gigconnect-lightpurple text-gigconnect-purple">
                 U
               </AvatarFallback>
             </Avatar>
-          </Link>
+          </Button>
 
           <div className="flex items-center space-x-2">
             <Button 
