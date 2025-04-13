@@ -136,6 +136,7 @@ const currentMessages = [
 
 const Messaging = () => {
   const [message, setMessage] = useState("");
+  const [activeConversationId, setActiveConversationId] = useState(1);
   const [activeConversation, setActiveConversation] = useState(conversations[0]);
   const { toast } = useToast();
   
@@ -150,6 +151,11 @@ const Messaging = () => {
       
       setMessage("");
     }
+  };
+  
+  const handleConversationSelect = (conversation) => {
+    setActiveConversationId(conversation.id);
+    setActiveConversation(conversation);
   };
   
   const handleStartCall = (type: "audio" | "video") => {
@@ -189,15 +195,15 @@ const Messaging = () => {
                 <div 
                   key={conversation.id}
                   className={`p-3 hover:bg-gigconnect-threads-card cursor-pointer transition-colors ${
-                    conversation.isActive ? "bg-gigconnect-threads-card" : ""
+                    activeConversationId === conversation.id ? "bg-gigconnect-threads-accent/10" : ""
                   }`}
-                  onClick={() => setActiveConversation(conversation)}
+                  onClick={() => handleConversationSelect(conversation)}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="relative">
                       <Avatar>
                         <AvatarImage src={conversation.user.avatar} />
-                        <AvatarFallback className="bg-gigconnect-purple">
+                        <AvatarFallback className={`${activeConversationId === conversation.id ? "bg-gigconnect-threads-accent" : "bg-gigconnect-purple"}`}>
                           {conversation.user.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
@@ -209,7 +215,9 @@ const Messaging = () => {
                     
                     <div className="flex-grow min-w-0">
                       <div className="flex justify-between items-center">
-                        <p className="font-medium truncate">{conversation.user.name}</p>
+                        <p className={`font-medium truncate ${activeConversationId === conversation.id ? "text-gigconnect-threads-accent" : ""}`}>
+                          {conversation.user.name}
+                        </p>
                         <span className="text-xs text-gigconnect-threads-muted">
                           {conversation.lastMessage.time}
                         </span>
