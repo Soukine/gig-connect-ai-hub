@@ -9,6 +9,7 @@ import SearchSection from "@/components/home/SearchSection";
 import FreelancesSection from "@/components/home/FreelancesSection";
 import ProjectsSection from "@/components/home/ProjectsSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection"; 
 import CTASection from "@/components/home/CTASection";
 import { featuredFreelances } from "@/components/home/data/freelanceData";
 import { featuredProjects } from "@/components/home/data/projectData";
@@ -46,6 +47,9 @@ const Index = () => {
       
       {/* How It Works Section */}
       <HowItWorksSection />
+      
+      {/* Testimonials Section */}
+      <TestimonialsSection />
       
       {/* CTA Section */}
       <CTASection />
