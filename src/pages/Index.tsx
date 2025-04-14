@@ -27,7 +27,7 @@ const Index = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gigconnect-lightpurple/10 via-white/20 to-gigconnect-purple/10 dark:from-gigconnect-darkpurple/20 dark:via-background/30 dark:to-gigconnect-purple/20">
       <Navbar />
       
       {/* Hero Section */}
