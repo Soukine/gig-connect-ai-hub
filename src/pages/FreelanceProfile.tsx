@@ -199,13 +199,36 @@ const FreelanceProfile = () => {
         </div>
         
         <div className="mt-10">
-          <Tabs defaultValue="about" className="w-full">
+          <Tabs defaultValue="portfolio" className="w-full">
             <TabsList className="w-full bg-gigconnect-threads-card border-b border-gigconnect-threads-border mb-6">
-              <TabsTrigger value="about" className="flex-1">À propos</TabsTrigger>
               <TabsTrigger value="portfolio" className="flex-1">Portfolio</TabsTrigger>
+              <TabsTrigger value="about" className="flex-1">À propos</TabsTrigger>
               <TabsTrigger value="services" className="flex-1">Services</TabsTrigger>
               <TabsTrigger value="reviews" className="flex-1">Avis</TabsTrigger>
             </TabsList>
+            
+            <TabsContent value="portfolio" className="animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {freelanceData.portfolio.map((work) => (
+                  <Card key={work.id} className="bg-gigconnect-threads-card border-gigconnect-threads-border overflow-hidden hover-transform">
+                    <div className="aspect-video bg-muted/20 flex items-center justify-center">
+                      {work.image ? (
+                        <img src={work.image} alt={work.title} className="object-cover w-full h-full" />
+                      ) : (
+                        <div className="text-gigconnect-threads-muted flex flex-col items-center justify-center h-full">
+                          <span className="text-5xl mb-2">🖼️</span>
+                          <span className="text-sm">Image du projet</span>
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="pt-4">
+                      <h3 className="font-bold text-lg">{work.title}</h3>
+                      <p className="text-sm text-gigconnect-threads-muted mt-1">{work.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
             
             <TabsContent value="about" className="animate-fade-in">
               <Card className="bg-gigconnect-threads-card border-gigconnect-threads-border">
@@ -270,29 +293,6 @@ const FreelanceProfile = () => {
                     </ul>
                   </CardContent>
                 </Card>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="portfolio" className="animate-fade-in">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {freelanceData.portfolio.map((work) => (
-                  <Card key={work.id} className="bg-gigconnect-threads-card border-gigconnect-threads-border overflow-hidden hover-transform">
-                    <div className="aspect-video bg-muted/20 flex items-center justify-center">
-                      {work.image ? (
-                        <img src={work.image} alt={work.title} className="object-cover w-full h-full" />
-                      ) : (
-                        <div className="text-gigconnect-threads-muted flex flex-col items-center justify-center h-full">
-                          <span className="text-5xl mb-2">🖼️</span>
-                          <span className="text-sm">Image du projet</span>
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="pt-4">
-                      <h3 className="font-bold text-lg">{work.title}</h3>
-                      <p className="text-sm text-gigconnect-threads-muted mt-1">{work.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
               </div>
             </TabsContent>
             
