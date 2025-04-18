@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,9 +18,14 @@ import {
   PenSquare,
   Star,
   X,
+  ChevronLeft,
+  ChevronRight,
+  Sliders,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { cn } from "@/lib/utils";
 
 // Données fictives pour les projets
 const projects = [
@@ -118,10 +123,10 @@ const projects = [
 
 // Catégories disponibles
 const categories = [
-  { id: "web", name: "Développement Web" },
-  { id: "mobile", name: "Développement Mobile" },
+  { id: "dev-web", name: "Développement Web" },
+  { id: "dev-mobile", name: "Développement Mobile" },
   { id: "design", name: "Design Graphique" },
-  { id: "writing", name: "Rédaction" },
+  { id: "redaction", name: "Rédaction" },
   { id: "marketing", name: "Marketing Digital" },
   { id: "video", name: "Vidéo & Animation" },
   { id: "photo", name: "Photographie" },
@@ -144,6 +149,19 @@ const Jobs = () => {
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { toast } = useToast();
+
+  // Effect for scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      setIsScrolled(scrollPosition > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Logique de filtrage
   const filteredProjects = projects.filter((project) => {
@@ -205,62 +223,94 @@ const Jobs = () => {
     setSelectedBudgets([]);
     setShowUrgentOnly(false);
     setShowFeaturedOnly(false);
+    
+    toast({
+      title: "Filtres réinitialisés",
+      description: "Tous les filtres ont été effacés",
+    });
+  };
+
+  const handleApplyFilters = () => {
+    setIsMobileFilterOpen(false);
+    
+    toast({
+      title: "Filtres appliqués",
+      description: `${filteredProjects.length} projets correspondent à vos critères`,
+    });
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white to-gigconnect-lightpurple/10 dark:from-background dark:to-gigconnect-darkpurple/10">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 animate-fade-in">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold">Projets disponibles</h1>
-            <p className="text-muted-foreground">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+          <div className="space-y-2">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gigconnect-purple to-gigconnect-darkpurple bg-clip-text text-transparent">
+              Projets disponibles
+            </h1>
+            <p className="text-muted-foreground max-w-2xl">
               Trouvez des opportunités adaptées à vos compétences et candidatez dès maintenant
             </p>
           </div>
           
           <div className="mt-4 md:mt-0">
-            <Button className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple">
-              <PenSquare className="h-4 w-4 mr-2" /> Publier un projet
+            <Button 
+              size="lg"
+              className="bg-gradient-to-r from-gigconnect-purple to-gigconnect-darkpurple hover:opacity-90 transition-all shadow-md hover:shadow-lg hover:translate-y-[-2px] group"
+            >
+              <PenSquare className="h-4 w-4 mr-2 group-hover:rotate-[-10deg] transition-transform" /> 
+              Publier un projet
             </Button>
           </div>
         </div>
         
-        {/* Tabs */}
-        <Tabs defaultValue="all" className="mb-6" onValueChange={(value) => setActiveTab(value)}>
-          <TabsList className="grid w-full grid-cols-3 max-w-md">
-            <TabsTrigger value="all">Tous les projets</TabsTrigger>
-            <TabsTrigger value="featured">Recommandés</TabsTrigger>
-            <TabsTrigger value="urgent">Urgents</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        
-        {/* Search bar */}
-        <div className="mb-6 relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Rechercher par compétence, titre ou mot-clé..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+        {/* Sticky tabs and search bar on scroll */}
+        <div className={cn(
+          "sticky top-0 z-10 pt-2 pb-4 bg-gradient-to-br from-white to-gigconnect-lightpurple/10 dark:from-background dark:to-gigconnect-darkpurple/10 transition-all duration-300",
+          isScrolled ? "shadow-md rounded-b-lg px-4 -mx-4" : ""
+        )}>
+          {/* Tabs */}
+          <Tabs defaultValue="all" className="mb-6" onValueChange={(value) => setActiveTab(value)}>
+            <TabsList className="grid w-full grid-cols-3 max-w-md bg-muted/50 backdrop-blur-sm">
+              <TabsTrigger value="all" className="data-[state=active]:bg-gigconnect-purple data-[state=active]:text-white transition-all">
+                Tous les projets
+              </TabsTrigger>
+              <TabsTrigger value="featured" className="data-[state=active]:bg-gigconnect-purple data-[state=active]:text-white transition-all">
+                <Star className="h-4 w-4 mr-1" /> Recommandés
+              </TabsTrigger>
+              <TabsTrigger value="urgent" className="data-[state=active]:bg-gigconnect-purple data-[state=active]:text-white transition-all">
+                <Clock className="h-4 w-4 mr-1" /> Urgents
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          
+          {/* Search bar */}
+          <div className="mb-6 relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Rechercher par compétence, titre ou mot-clé..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 bg-white dark:bg-card shadow-sm border-gigconnect-purple/20 focus-visible:ring-gigconnect-purple"
+            />
+          </div>
         </div>
         
         {/* Active filters */}
         {(selectedCategories.length > 0 || selectedBudgets.length > 0 || showUrgentOnly || showFeaturedOnly || searchTerm) && (
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6 animate-fade-in">
             {selectedCategories.map(catId => (
               <Badge
                 key={catId}
                 variant="outline"
-                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1"
+                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1.5 hover:bg-gigconnect-lightpurple/40 transition-colors backdrop-blur-sm"
               >
                 {categories.find(cat => cat.id === catId)?.name}
                 <X 
-                  className="h-3 w-3 cursor-pointer" 
+                  className="h-3 w-3 cursor-pointer ml-1 hover:text-gigconnect-purple" 
                   onClick={() => toggleCategory(catId)}
                 />
               </Badge>
@@ -270,11 +320,11 @@ const Jobs = () => {
               <Badge
                 key={budgetId}
                 variant="outline"
-                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1"
+                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1.5 hover:bg-gigconnect-lightpurple/40 transition-colors backdrop-blur-sm"
               >
                 {budgetRanges.find(budget => budget.id === budgetId)?.name}
                 <X 
-                  className="h-3 w-3 cursor-pointer" 
+                  className="h-3 w-3 cursor-pointer ml-1 hover:text-gigconnect-purple" 
                   onClick={() => toggleBudget(budgetId)}
                 />
               </Badge>
@@ -283,11 +333,11 @@ const Jobs = () => {
             {showUrgentOnly && (
               <Badge
                 variant="outline"
-                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1"
+                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1.5 hover:bg-gigconnect-lightpurple/40 transition-colors backdrop-blur-sm"
               >
                 Urgents uniquement
                 <X 
-                  className="h-3 w-3 cursor-pointer" 
+                  className="h-3 w-3 cursor-pointer ml-1 hover:text-gigconnect-purple" 
                   onClick={() => setShowUrgentOnly(false)}
                 />
               </Badge>
@@ -296,11 +346,11 @@ const Jobs = () => {
             {showFeaturedOnly && (
               <Badge
                 variant="outline"
-                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1"
+                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1.5 hover:bg-gigconnect-lightpurple/40 transition-colors backdrop-blur-sm"
               >
                 Recommandés uniquement
                 <X 
-                  className="h-3 w-3 cursor-pointer" 
+                  className="h-3 w-3 cursor-pointer ml-1 hover:text-gigconnect-purple" 
                   onClick={() => setShowFeaturedOnly(false)}
                 />
               </Badge>
@@ -309,11 +359,11 @@ const Jobs = () => {
             {searchTerm && (
               <Badge
                 variant="outline"
-                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1"
+                className="bg-gigconnect-lightpurple/30 flex items-center gap-1 px-3 py-1.5 hover:bg-gigconnect-lightpurple/40 transition-colors backdrop-blur-sm"
               >
                 "{searchTerm}"
                 <X 
-                  className="h-3 w-3 cursor-pointer" 
+                  className="h-3 w-3 cursor-pointer ml-1 hover:text-gigconnect-purple" 
                   onClick={() => setSearchTerm("")}
                 />
               </Badge>
@@ -322,7 +372,7 @@ const Jobs = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-muted-foreground"
+              className="text-muted-foreground hover:text-gigconnect-purple transition-colors"
               onClick={clearAllFilters}
             >
               Effacer tous les filtres
@@ -334,38 +384,39 @@ const Jobs = () => {
           {/* Filters sidebar */}
           <aside className={`${
             isMobileFilterOpen 
-              ? "fixed inset-0 z-40 bg-background p-4 overflow-auto animate-fade-in" 
+              ? "fixed inset-0 z-40 bg-background/95 backdrop-blur-md p-6 overflow-auto animate-fade-in" 
               : "hidden"
             } lg:block lg:static lg:w-64 lg:flex-shrink-0`}
           >
-            <div className="lg:sticky lg:top-20 space-y-6">
+            <div className="lg:sticky lg:top-24 space-y-6 bg-white dark:bg-card rounded-xl p-5 shadow-sm border border-gigconnect-purple/10 animate-fade-in">
               <div className="flex items-center justify-between mb-4 lg:mb-0">
-                <h2 className="text-lg font-semibold flex items-center gap-2">
-                  <Filter className="h-5 w-5" /> Filtres
+                <h2 className="text-lg font-semibold flex items-center gap-2 text-gigconnect-purple">
+                  <Sliders className="h-5 w-5" /> Filtres
                 </h2>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="lg:hidden"
+                  className="lg:hidden hover:bg-gigconnect-purple/10 hover:text-gigconnect-purple rounded-full h-8 w-8 p-0"
                   onClick={() => setIsMobileFilterOpen(false)}
                 >
                   <X className="h-5 w-5" />
                 </Button>
               </div>
               
-              <div>
-                <h3 className="font-medium mb-3">Catégories</h3>
-                <div className="space-y-2">
+              <div className="pb-4 border-b">
+                <h3 className="font-medium mb-3 text-foreground/80">Catégories</h3>
+                <div className="space-y-2.5">
                   {categories.map((category) => (
-                    <div key={category.id} className="flex items-center space-x-2">
+                    <div key={category.id} className="flex items-center space-x-2 group">
                       <Checkbox
                         id={`category-${category.id}`}
                         checked={selectedCategories.includes(category.id)}
                         onCheckedChange={() => toggleCategory(category.id)}
+                        className="border-gigconnect-purple/50 data-[state=checked]:bg-gigconnect-purple data-[state=checked]:border-gigconnect-purple"
                       />
                       <label
                         htmlFor={`category-${category.id}`}
-                        className="text-sm cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="text-sm cursor-pointer leading-none group-hover:text-gigconnect-purple transition-colors"
                       >
                         {category.name}
                       </label>
@@ -374,19 +425,20 @@ const Jobs = () => {
                 </div>
               </div>
               
-              <div>
-                <h3 className="font-medium mb-3">Budget</h3>
-                <div className="space-y-2">
+              <div className="pb-4 border-b">
+                <h3 className="font-medium mb-3 text-foreground/80">Budget</h3>
+                <div className="space-y-2.5">
                   {budgetRanges.map((budget) => (
-                    <div key={budget.id} className="flex items-center space-x-2">
+                    <div key={budget.id} className="flex items-center space-x-2 group">
                       <Checkbox
                         id={`budget-${budget.id}`}
                         checked={selectedBudgets.includes(budget.id)}
                         onCheckedChange={() => toggleBudget(budget.id)}
+                        className="border-gigconnect-purple/50 data-[state=checked]:bg-gigconnect-purple data-[state=checked]:border-gigconnect-purple"
                       />
                       <label
                         htmlFor={`budget-${budget.id}`}
-                        className="text-sm cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="text-sm cursor-pointer leading-none group-hover:text-gigconnect-purple transition-colors"
                       >
                         {budget.name}
                       </label>
@@ -396,31 +448,33 @@ const Jobs = () => {
               </div>
               
               <div>
-                <h3 className="font-medium mb-3">Options</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
+                <h3 className="font-medium mb-3 text-foreground/80">Options</h3>
+                <div className="space-y-2.5">
+                  <div className="flex items-center space-x-2 group">
                     <Checkbox
                       id="urgent"
                       checked={showUrgentOnly}
                       onCheckedChange={() => setShowUrgentOnly(!showUrgentOnly)}
+                      className="border-gigconnect-purple/50 data-[state=checked]:bg-gigconnect-purple data-[state=checked]:border-gigconnect-purple"
                     />
                     <label
                       htmlFor="urgent"
-                      className="text-sm cursor-pointer leading-none"
+                      className="text-sm cursor-pointer leading-none group-hover:text-gigconnect-purple transition-colors"
                     >
                       Projets urgents uniquement
                     </label>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 group">
                     <Checkbox
                       id="featured"
                       checked={showFeaturedOnly}
                       onCheckedChange={() => setShowFeaturedOnly(!showFeaturedOnly)}
+                      className="border-gigconnect-purple/50 data-[state=checked]:bg-gigconnect-purple data-[state=checked]:border-gigconnect-purple"
                     />
                     <label
                       htmlFor="featured"
-                      className="text-sm cursor-pointer leading-none"
+                      className="text-sm cursor-pointer leading-none group-hover:text-gigconnect-purple transition-colors"
                     >
                       Projets recommandés uniquement
                     </label>
@@ -430,8 +484,8 @@ const Jobs = () => {
               
               <div className="pt-4 border-t lg:hidden">
                 <Button
-                  className="w-full bg-gigconnect-purple hover:bg-gigconnect-darkpurple"
-                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="w-full bg-gigconnect-purple hover:bg-gigconnect-darkpurple shadow-md"
+                  onClick={handleApplyFilters}
                 >
                   Voir {filteredProjects.length} résultats
                 </Button>
@@ -443,21 +497,21 @@ const Jobs = () => {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-6">
               <div className="text-sm text-muted-foreground">
-                {filteredProjects.length} projets trouvés
+                <span className="font-medium text-gigconnect-purple">{filteredProjects.length}</span> projets trouvés
               </div>
               
               <Button
                 variant="outline"
                 size="sm"
-                className="md:hidden"
+                className="md:hidden border-gigconnect-purple/30 text-gigconnect-purple hover:bg-gigconnect-purple/10 hover:border-gigconnect-purple"
                 onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
               >
                 <Filter className="h-4 w-4 mr-2" /> Filtres
               </Button>
               
               <div className="hidden md:flex items-center">
-                <span className="text-sm mr-2">Trier par:</span>
-                <select className="text-sm border rounded-md px-2 py-1">
+                <span className="text-sm mr-2 text-muted-foreground">Trier par:</span>
+                <select className="text-sm border rounded-md px-3 py-1.5 bg-white dark:bg-card border-gigconnect-purple/20 focus:outline-none focus:ring-1 focus:ring-gigconnect-purple cursor-pointer">
                   <option value="relevance">Pertinence</option>
                   <option value="date_new">Plus récents</option>
                   <option value="date_old">Plus anciens</option>
@@ -471,68 +525,87 @@ const Jobs = () => {
             {filteredProjects.length > 0 ? (
               <div className="space-y-6">
                 {filteredProjects.map((project) => (
-                  <Link to={`/project/${project.id}`} key={project.id}>
-                    <Card className="gig-card hover-transform overflow-hidden">
+                  <Link to={`/project/${project.id}`} key={project.id} className="block group">
+                    <Card className="overflow-hidden border-transparent hover:border-gigconnect-purple/30 transition-all duration-300 hover:shadow-md group-hover:shadow-gigconnect-purple/10 bg-white dark:bg-card">
                       <CardContent className="p-0">
                         <div className="p-6">
                           <div className="flex items-start justify-between">
                             <div>
-                              <div className="flex items-center gap-2 mb-2">
-                                <Badge variant="outline" className="bg-gigconnect-lightpurple/20 text-gigconnect-darkpurple">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <Badge 
+                                  variant="outline" 
+                                  className="bg-gigconnect-lightpurple/20 text-gigconnect-darkpurple border-gigconnect-lightpurple/30 font-medium"
+                                >
                                   {project.category}
                                 </Badge>
                                 {project.isFeatured && (
-                                  <Badge variant="outline" className="bg-gigconnect-lightpurple text-gigconnect-purple">
-                                    <Star className="h-3 w-3 mr-1 fill-current" /> Recommandé
+                                  <Badge className="bg-gigconnect-purple text-white px-2.5 group-hover:bg-gigconnect-purple/90">
+                                    <Star className="h-3 w-3 mr-1 fill-current group-hover:animate-pulse" /> Recommandé
                                   </Badge>
                                 )}
                                 {project.isUrgent && (
-                                  <Badge className="bg-red-500">Urgent</Badge>
+                                  <Badge className="bg-red-500 text-white group-hover:bg-red-600 px-2.5">
+                                    <Clock className="h-3 w-3 mr-1" /> Urgent
+                                  </Badge>
                                 )}
                               </div>
-                              <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                              <h3 className="text-xl font-semibold mb-2 group-hover:text-gigconnect-purple transition-colors line-clamp-1">
+                                {project.title}
+                              </h3>
                             </div>
                             <div className="text-right">
-                              <div className="text-sm font-medium text-gigconnect-purple">{project.budget}</div>
-                              <div className="text-xs text-muted-foreground mt-1">{project.postedDate}</div>
+                              <div className="text-base font-medium text-gigconnect-purple bg-gigconnect-lightpurple/20 px-3 py-1 rounded-full">
+                                {project.budget}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-1.5">
+                                {project.postedDate}
+                              </div>
                             </div>
                           </div>
                           
-                          <p className="text-sm line-clamp-2 mb-4">
+                          <p className="text-sm line-clamp-2 mb-4 text-foreground/80">
                             {project.description}
                           </p>
                           
-                          <div className="flex flex-wrap gap-1 mb-4">
+                          <div className="flex flex-wrap gap-1.5 mb-4">
                             {project.skills.map((skill, index) => (
                               <Badge
                                 key={index}
                                 variant="outline"
-                                className="bg-muted/50"
+                                className="bg-muted/50 hover:bg-muted transition-colors text-xs"
                               >
                                 {skill}
                               </Badge>
                             ))}
                           </div>
                           
-                          <div className="flex items-center pt-4 border-t">
+                          <div className="flex items-center pt-4 border-t border-border/40">
                             <div className="flex items-center">
-                              <Avatar className="h-6 w-6 mr-2">
+                              <Avatar className="h-7 w-7 mr-2 border border-gigconnect-purple/20">
                                 <AvatarFallback className="bg-gigconnect-purple/20 text-gigconnect-purple text-xs">
                                   {project.client.charAt(0)}
                                 </AvatarFallback>
                               </Avatar>
-                              <span className="text-sm">{project.client}</span>
+                              <span className="text-sm font-medium">{project.client}</span>
+                              {project.clientVerified && (
+                                <Badge className="ml-2 bg-green-500/20 text-green-700 dark:text-green-400 text-xs px-1.5 py-0">
+                                  Vérifié
+                                </Badge>
+                              )}
                             </div>
                             
-                            <div className="ml-auto flex items-center gap-4 text-sm">
+                            <div className="ml-auto flex flex-wrap gap-3 text-sm">
                               <div className="flex items-center text-muted-foreground">
-                                <Calendar className="h-4 w-4 mr-1" /> {project.duration}
+                                <Calendar className="h-4 w-4 mr-1 text-gigconnect-purple/70" /> 
+                                <span>{project.duration}</span>
                               </div>
                               <div className="flex items-center text-muted-foreground">
-                                <Clock className="h-4 w-4 mr-1" /> {project.postedDate}
+                                <Clock className="h-4 w-4 mr-1 text-gigconnect-purple/70" /> 
+                                <span>{project.postedDate}</span>
                               </div>
                               <div className="flex items-center text-muted-foreground">
-                                <FileCheck className="h-4 w-4 mr-1" /> {project.proposals} propositions
+                                <FileCheck className="h-4 w-4 mr-1 text-gigconnect-purple/70" /> 
+                                <span className="font-medium">{project.proposals}</span> propositions
                               </div>
                             </div>
                           </div>
@@ -543,41 +616,67 @@ const Jobs = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 border rounded-lg">
+              <div className="text-center py-16 border rounded-xl bg-white/50 dark:bg-card/50 backdrop-blur-sm shadow-sm animate-fade-in">
                 <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold mb-2">Aucun projet trouvé</h3>
-                <p className="text-muted-foreground mb-6">
-                  Essayez de modifier vos filtres ou d'utiliser des mots-clés différents
+                <h3 className="text-xl font-semibold mb-3 text-gigconnect-darkpurple">Aucun projet trouvé</h3>
+                <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                  Essayez de modifier vos filtres ou d'utiliser des mots-clés différents pour trouver des projets correspondant à vos critères
                 </p>
-                <Button onClick={clearAllFilters}>Réinitialiser les filtres</Button>
+                <Button 
+                  onClick={clearAllFilters}
+                  className="bg-gigconnect-purple hover:bg-gigconnect-darkpurple"
+                >
+                  Réinitialiser les filtres
+                </Button>
               </div>
             )}
             
             {/* Pagination */}
             {filteredProjects.length > 0 && (
               <div className="flex justify-center mt-10">
-                <div className="flex items-center gap-1">
-                  <Button variant="outline" size="icon" disabled>
-                    &lt;
+                <div className="flex items-center gap-1.5">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    disabled
+                    className="border-gigconnect-purple/30 text-gigconnect-purple"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm" className="bg-gigconnect-purple text-white">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="bg-gigconnect-purple text-white hover:bg-gigconnect-darkpurple border-transparent w-8 h-8"
+                  >
                     1
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-gigconnect-purple/30 text-gigconnect-purple hover:bg-gigconnect-purple/10 hover:text-gigconnect-darkpurple w-8 h-8"
+                  >
                     2
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-gigconnect-purple/30 text-gigconnect-purple hover:bg-gigconnect-purple/10 hover:text-gigconnect-darkpurple w-8 h-8"
+                  >
                     3
                   </Button>
-                  <Button variant="outline" size="icon">
-                    &gt;
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    className="border-gigconnect-purple/30 text-gigconnect-purple hover:bg-gigconnect-purple/10 hover:text-gigconnect-darkpurple"
+                  >
+                    <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             )}
           </div>
         </div>
-      </div>
+      </main>
       
       <div className="mt-auto">
         <Footer />
