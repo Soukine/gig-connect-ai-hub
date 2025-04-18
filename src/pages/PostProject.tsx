@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { categorySkills, type Skill } from "@/data/categorySkills";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { 
   FileText, Tag, Briefcase, CreditCard, CalendarClock, 
-  ArrowRight, Check 
+  ArrowRight, Check, X 
 } from "lucide-react";
 
 const categories = [
@@ -76,6 +77,7 @@ const formSchema = z.object({
   skills: z.array(z.string()).min(1, {
     message: "Sélectionnez au moins une compétence requise.",
   }),
+  customSkills: z.array(z.string()),
   budget: z.object({
     type: z.enum(["fixed", "hourly"], {
       required_error: "Veuillez sélectionner un type de budget.",
@@ -96,6 +98,7 @@ const PostProject = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newSkill, setNewSkill] = useState("");
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -103,6 +106,7 @@ const PostProject = () => {
       title: "",
       description: "",
       skills: [],
+      customSkills: [],
       budget: {
         type: "fixed",
         min: "",
@@ -112,8 +116,18 @@ const PostProject = () => {
     },
   });
 
-  const getAvailableSkills = () => {
-    return webDevSkills;
+  const getAvailableSkills = (category: string): Skill[] => {
+    return categorySkills[category] || [];
+  };
+
+  const handleAddCustomSkill = () => {
+    if (!newSkill.trim()) return;
+    
+    const customSkills = form.getValues("customSkills");
+    if (!customSkills.includes(newSkill.trim())) {
+      form.setValue("customSkills", [...customSkills, newSkill.trim()]);
+      setNewSkill("");
+    }
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -251,44 +265,99 @@ const PostProject = () => {
                             Compétences requises
                           </FormLabel>
                           <FormDescription>
-                            Sélectionnez les compétences nécessaires pour ce projet
+                            Sélectionnez ou ajoutez les compétences nécessaires
                           </FormDescription>
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                          {webDevSkills.map((skill) => (
-                            <FormField
-                              key={skill.id}
-                              control={form.control}
-                              name="skills"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={skill.id}
-                                    className="flex items-center space-x-2 space-y-0 rounded-lg border border-input/50 p-3 hover:bg-accent/50 transition-colors"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(skill.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, skill.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== skill.id
+                        
+                        {selectedCategory && (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {getAvailableSkills(selectedCategory).map((skill) => (
+                                <FormField
+                                  key={skill.id}
+                                  control={form.control}
+                                  name="skills"
+                                  render={({ field }) => (
+                                    <FormItem
+                                      key={skill.id}
+                                      className="flex items-center space-x-2 space-y-0 rounded-lg border border-input/50 p-3 hover:bg-accent/50 transition-colors"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(skill.id)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...field.value, skill.id])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== skill.id
+                                                  )
                                                 )
-                                              )
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="text-sm font-normal cursor-pointer">
+                                        {skill.name}
+                                      </FormLabel>
+                                    </FormItem>
+                                  )}
+                                />
+                              ))}
+                            </div>
+
+                            <div className="space-y-2">
+                              <FormLabel>Ajouter une compétence personnalisée</FormLabel>
+                              <div className="flex gap-2">
+                                <Input
+                                  value={newSkill}
+                                  onChange={(e) => setNewSkill(e.target.value)}
+                                  placeholder="Ex: React Native"
+                                  className="flex-1"
+                                  onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      handleAddCustomSkill();
+                                    }
+                                  }}
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  className="shrink-0"
+                                  onClick={handleAddCustomSkill}
+                                >
+                                  Ajouter
+                                </Button>
+                              </div>
+
+                              {form.watch("customSkills").length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                  {form.watch("customSkills").map((skill, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-1 bg-gigconnect-purple/10 text-gigconnect-purple px-2 py-1 rounded-md text-sm"
+                                    >
+                                      {skill}
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const customSkills = form.getValues("customSkills");
+                                          form.setValue(
+                                            "customSkills",
+                                            customSkills.filter((_, i) => i !== index)
+                                          );
                                         }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm font-normal cursor-pointer">
-                                      {skill.name}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
+                                        className="text-gigconnect-purple hover:text-gigconnect-purple/80 transition-colors"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
