@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -31,8 +30,11 @@ import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { 
+  FileText, Tag, Briefcase, CreditCard, CalendarClock, 
+  ArrowRight, Check 
+} from "lucide-react";
 
-// Categories for the dropdown
 const categories = [
   { id: "dev", name: "Développement web & mobile" },
   { id: "design", name: "Design & Création" },
@@ -44,7 +46,6 @@ const categories = [
   { id: "data", name: "Données & IA" },
 ];
 
-// Skills for checkboxes (sample for web dev)
 const webDevSkills = [
   { id: "html", name: "HTML/CSS" },
   { id: "js", name: "JavaScript" },
@@ -60,7 +61,6 @@ const webDevSkills = [
   { id: "ruby", name: "Ruby on Rails" },
 ];
 
-// Validation schema
 const formSchema = z.object({
   title: z.string().min(10, {
     message: "Le titre doit comporter au moins 10 caractères.",
@@ -95,8 +95,8 @@ const PostProject = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -108,216 +108,74 @@ const PostProject = () => {
         min: "",
         max: "",
       },
-      termsAccepted: false as unknown as true, // This fix uses type assertion
+      termsAccepted: false as unknown as true,
     },
   });
-  
-  // Get available skills based on selected category (in real app, this would be dynamic)
+
   const getAvailableSkills = () => {
-    // This is simplified, in a real app you'd fetch skills based on category
     return webDevSkills;
   };
-  
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
     console.log(values);
     
-    // Show success toast
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
     toast({
-      title: "Projet publié avec succès",
-      description: "Les freelances peuvent maintenant voir votre projet et y répondre.",
+      title: "Projet publié avec succès!",
+      description: "Les freelances peuvent maintenant voir votre projet.",
+      duration: 5000,
     });
     
-    // Redirect to a success page or projects list
+    setIsSubmitting(false);
     setTimeout(() => {
       navigate("/");
-    }, 1500);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gigconnect-threads-bg text-gigconnect-threads-text">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gigconnect-purple/5 to-transparent">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8 threads-layout">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">Publier un nouveau projet</h1>
-        
-        <Card className="bg-gigconnect-threads-card border-gigconnect-threads-border">
-          <CardHeader>
-            <CardTitle>Détails du projet</CardTitle>
-            <CardDescription className="text-gigconnect-threads-muted">
-              Décrivez votre projet clairement pour attirer les freelances les plus qualifiés
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Titre du projet</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Ex: Développement d'un site e-commerce WordPress" 
-                          className="bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormDescription className="text-gigconnect-threads-muted">
-                        Soyez spécifique et concis (10-100 caractères)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Catégorie</FormLabel>
-                      <Select 
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setSelectedCategory(value);
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text">
-                            <SelectValue placeholder="Sélectionner une catégorie" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-gigconnect-threads-card border-gigconnect-threads-border text-gigconnect-threads-text">
-                          {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description du projet</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Décrivez votre projet en détail..." 
-                          className="min-h-32 bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormDescription className="text-gigconnect-threads-muted">
-                        Soyez le plus détaillé possible sur vos besoins, attentes et exigences (minimum 50 caractères)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="skills"
-                  render={() => (
-                    <FormItem>
-                      <div className="mb-2">
-                        <FormLabel>Compétences requises</FormLabel>
-                        <FormDescription className="text-gigconnect-threads-muted">
-                          Sélectionnez les compétences nécessaires pour ce projet
-                        </FormDescription>
-                      </div>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                        {getAvailableSkills().map((skill) => (
-                          <FormField
-                            key={skill.id}
-                            control={form.control}
-                            name="skills"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={skill.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(skill.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...field.value, skill.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== skill.id
-                                              )
-                                            )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="text-sm font-normal cursor-pointer">
-                                    {skill.name}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Separator className="bg-gigconnect-threads-border" />
-                
-                <FormField
-                  control={form.control}
-                  name="budget.type"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormLabel>Type de budget</FormLabel>
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex flex-col space-y-1"
-                        >
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="fixed" id="fixed" />
-                            <Label htmlFor="fixed" className="cursor-pointer">Budget fixe (pour tout le projet)</Label>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="hourly" id="hourly" />
-                            <Label htmlFor="hourly" className="cursor-pointer">Taux horaire</Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="flex flex-col sm:flex-row gap-4">
+      <div className="container mx-auto px-4 py-8 animate-fade-in">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gigconnect-purple to-gigconnect-darkpurple bg-clip-text text-transparent">
+            Publier un nouveau projet
+          </h1>
+          <p className="text-muted-foreground mb-8">
+            Trouvez le freelance idéal en décrivant précisément vos besoins
+          </p>
+          
+          <Card className="bg-card/50 backdrop-blur-sm border-gigconnect-purple/20 shadow-lg hover:shadow-gigconnect-purple/5 transition-all duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-gigconnect-purple" />
+                Détails du projet
+              </CardTitle>
+              <CardDescription>
+                Plus vos détails seront précis, plus vous attirerez les freelances qualifiés
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
                     control={form.control}
-                    name="budget.min"
+                    name="title"
                     render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Budget minimum (€)</FormLabel>
+                      <FormItem>
+                        <FormLabel>Titre du projet</FormLabel>
                         <FormControl>
                           <Input 
-                            type="number"
-                            className="bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text"
-                            placeholder="Min" 
+                            placeholder="Ex: Développement d'un site e-commerce WordPress" 
+                            className="bg-background/50 border-input/50 focus:border-gigconnect-purple transition-colors"
                             {...field} 
                           />
                         </FormControl>
+                        <FormDescription>
+                          Soyez spécifique et concis (10-100 caractères)
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -325,36 +183,205 @@ const PostProject = () => {
                   
                   <FormField
                     control={form.control}
-                    name="budget.max"
+                    name="category"
                     render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Budget maximum (€)</FormLabel>
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2">
+                          <Briefcase className="w-4 h-4 text-gigconnect-purple" />
+                          Catégorie
+                        </FormLabel>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedCategory(value);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="bg-background/50 border-input/50 focus:border-gigconnect-purple">
+                              <SelectValue placeholder="Sélectionner une catégorie" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-background/90 backdrop-blur-sm">
+                            {categories.map((category) => (
+                              <SelectItem 
+                                key={category.id} 
+                                value={category.id}
+                                className="focus:bg-gigconnect-purple/10 focus:text-gigconnect-purple"
+                              >
+                                {category.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description du projet</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number"
-                            className="bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text"
-                            placeholder="Max" 
+                          <Textarea 
+                            placeholder="Décrivez votre projet en détail..." 
+                            className="min-h-32 bg-background/50 border-input/50 focus:border-gigconnect-purple resize-y"
                             {...field} 
                           />
+                        </FormControl>
+                        <FormDescription>
+                          Détaillez vos besoins, attentes et exigences (minimum 50 caractères)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="skills"
+                    render={() => (
+                      <FormItem>
+                        <div className="mb-4">
+                          <FormLabel className="flex items-center gap-2">
+                            <Tag className="w-4 h-4 text-gigconnect-purple" />
+                            Compétences requises
+                          </FormLabel>
+                          <FormDescription>
+                            Sélectionnez les compétences nécessaires pour ce projet
+                          </FormDescription>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {webDevSkills.map((skill) => (
+                            <FormField
+                              key={skill.id}
+                              control={form.control}
+                              name="skills"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={skill.id}
+                                    className="flex items-center space-x-2 space-y-0 rounded-lg border border-input/50 p-3 hover:bg-accent/50 transition-colors"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(skill.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...field.value, skill.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== skill.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="text-sm font-normal cursor-pointer">
+                                      {skill.name}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <Separator className="bg-border/50" />
+                  
+                  <FormField
+                    control={form.control}
+                    name="budget.type"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel className="flex items-center gap-2">
+                          <CreditCard className="w-4 h-4 text-gigconnect-purple" />
+                          Type de budget
+                        </FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex flex-col space-y-1"
+                          >
+                            <div className="flex items-center space-x-2 rounded-lg border border-input/50 p-3 hover:bg-accent/50 transition-colors">
+                              <RadioGroupItem value="fixed" id="fixed" />
+                              <Label htmlFor="fixed" className="cursor-pointer">Budget fixe (pour tout le projet)</Label>
+                            </div>
+                            <div className="flex items-center space-x-2 rounded-lg border border-input/50 p-3 hover:bg-accent/50 transition-colors">
+                              <RadioGroupItem value="hourly" id="hourly" />
+                              <Label htmlFor="hourly" className="cursor-pointer">Taux horaire</Label>
+                            </div>
+                          </RadioGroup>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="deadline"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Délai de réalisation</FormLabel>
-                      <FormControl>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <FormField
+                      control={form.control}
+                      name="budget.min"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Budget minimum (€)</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number"
+                              className="bg-background/50 border-input/50 focus:border-gigconnect-purple"
+                              placeholder="Min" 
+                              {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="budget.max"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormLabel>Budget maximum (€)</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number"
+                              className="bg-background/50 border-input/50 focus:border-gigconnect-purple"
+                              placeholder="Max" 
+                              {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="deadline"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2">
+                          <CalendarClock className="w-4 h-4 text-gigconnect-purple" />
+                          Délai de réalisation
+                        </FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <SelectTrigger className="bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text">
-                            <SelectValue placeholder="Sélectionnez un délai" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-gigconnect-threads-card border-gigconnect-threads-border text-gigconnect-threads-text">
+                          <FormControl>
+                            <SelectTrigger className="bg-background/50 border-input/50 focus:border-gigconnect-purple">
+                              <SelectValue placeholder="Sélectionnez un délai" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="bg-background/90 backdrop-blur-sm">
                             <SelectItem value="less_than_1_week">Moins d'une semaine</SelectItem>
                             <SelectItem value="1_2_weeks">1 à 2 semaines</SelectItem>
                             <SelectItem value="2_4_weeks">2 à 4 semaines</SelectItem>
@@ -362,44 +389,58 @@ const PostProject = () => {
                             <SelectItem value="more_than_3_months">Plus de 3 mois</SelectItem>
                           </SelectContent>
                         </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Separator className="bg-gigconnect-threads-border" />
-                
-                <FormField
-                  control={form.control}
-                  name="termsAccepted"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="text-sm font-normal cursor-pointer">
-                          J'accepte les conditions d'utilisation et la politique de confidentialité
-                        </FormLabel>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <CardFooter className="flex justify-end px-0 pb-0">
-                  <Button type="submit" className="threads-button">
-                    Publier le projet
-                  </Button>
-                </CardFooter>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <Separator className="bg-border/50" />
+                  
+                  <FormField
+                    control={form.control}
+                    name="termsAccepted"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-input/50 p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-sm font-normal cursor-pointer">
+                            J'accepte les conditions d'utilisation et la politique de confidentialité
+                          </FormLabel>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <CardFooter className="flex justify-end px-0 pb-0">
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="bg-gigconnect-purple hover:bg-gigconnect-purple/90 text-white gap-2 group"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="animate-pulse">Publication en cours...</span>
+                          <Check className="w-4 h-4 animate-bounce" />
+                        </>
+                      ) : (
+                        <>
+                          Publier le projet
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        </>
+                      )}
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       
       <div className="mt-auto">
