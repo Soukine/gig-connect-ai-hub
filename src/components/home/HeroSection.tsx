@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,7 @@ const HeroSection = () => {
   const handleFreelanceSignup = () => {
     toast({
       title: "Redirection vers l'inscription",
-      description: "Créez votre compte freelance en quelques étapes",
+      description: "Créez votre compte indépendant en quelques étapes",
     });
     navigate("/auth", { state: { role: "freelance" } });
   };
@@ -21,7 +20,7 @@ const HeroSection = () => {
   const handleClientSignup = () => {
     toast({
       title: "Redirection vers l'inscription",
-      description: "Trouvez le freelance idéal pour votre projet",
+      description: "Trouvez l'indépendant idéal pour votre projet",
     });
     navigate("/auth", { state: { role: "client" } });
   };
@@ -33,7 +32,7 @@ const HeroSection = () => {
       <div className="container mx-auto pt-20 pb-32 px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <Badge className="mb-6 py-1.5 px-6 text-sm bg-white/10 text-gigconnect-purple dark:text-gigconnect-lightpurple backdrop-blur-lg border border-gigconnect-purple/20 hover:bg-white/20 transition-colors duration-300">
-            Un nouvel espace pour les freelances
+            Un nouvel espace pour les indépendants
           </Badge>
           
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-gigconnect-purple to-gigconnect-darkpurple bg-clip-text text-transparent tracking-tight leading-tight animate-fade-in select-none">
@@ -41,7 +40,7 @@ const HeroSection = () => {
           </h1>
           
           <p className="text-lg sm:text-xl md:text-2xl mb-10 text-gigconnect-threads-text/80 leading-relaxed max-w-3xl mx-auto animate-fade-in">
-            La plateforme qui réunit freelances et clients pour des collaborations
+            La plateforme qui réunit indépendants et clients pour des collaborations
             réussies dans l'univers du digital.
           </p>
           
@@ -52,7 +51,7 @@ const HeroSection = () => {
               onClick={handleFreelanceSignup}
             >
               <Users className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-              Je suis un Freelance 
+              Je suis un Indépendant 
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button 
@@ -62,7 +61,7 @@ const HeroSection = () => {
               onClick={handleClientSignup}
             >
               <Briefcase className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
-              Je recherche un Freelance
+              Je recherche un Indépendant
             </Button>
           </div>
         </div>

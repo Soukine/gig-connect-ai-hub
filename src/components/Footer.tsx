@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -10,12 +9,12 @@ const Footer = () => {
           <div>
             <Link to="/" className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-gigconnect-purple font-semibold">
-                G
+                5
               </div>
-              <span className="font-bold text-xl">GigConnect</span>
+              <span className="font-bold text-xl">5's</span>
             </Link>
             <p className="mt-4 text-sm text-gray-300">
-              La plateforme qui connecte les freelances et les clients de manière intuitive et sécurisée.
+              La plateforme qui connecte les indépendants et les clients de manière intuitive et sécurisée.
             </p>
             <div className="mt-4 flex space-x-4">
               <Button variant="outline" size="icon" className="rounded-full border-white/20 hover:bg-white/10">
@@ -70,7 +69,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-10 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
-          <p>© 2025 GigConnect. Tous droits réservés.</p>
+          <p>© 2025 5's. Tous droits réservés.</p>
         </div>
       </div>
     </footer>
