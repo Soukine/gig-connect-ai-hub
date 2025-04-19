@@ -40,17 +40,21 @@ const AuthTabs = () => {
   };
 
   return (
-    <Tabs defaultValue="login" className="w-full animate-fade-in">
+    <Tabs defaultValue="login" className="w-full">
       <TabsList className="grid w-full grid-cols-2 mb-6">
-        <TabsTrigger value="login" className="text-sm py-2.5">Connexion</TabsTrigger>
-        <TabsTrigger value="register" className="text-sm py-2.5">Inscription</TabsTrigger>
+        <TabsTrigger value="login" className="text-sm py-2.5 auth-tab">
+          Connexion
+        </TabsTrigger>
+        <TabsTrigger value="register" className="text-sm py-2.5 auth-tab">
+          Inscription
+        </TabsTrigger>
       </TabsList>
       
-      <TabsContent value="login" className="animate-fade-in">
+      <TabsContent value="login" className="auth-form-appear">
         <LoginForm onSubmit={handleLogin} />
       </TabsContent>
       
-      <TabsContent value="register" className="animate-fade-in">
+      <TabsContent value="register" className="auth-form-appear">
         <RegisterForm 
           onSubmit={handleRegister} 
           userType={userType} 

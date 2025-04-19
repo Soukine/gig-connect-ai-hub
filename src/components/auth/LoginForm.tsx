@@ -14,7 +14,9 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   return (
     <Card className="auth-card">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Connexion</CardTitle>
+        <CardTitle className="text-2xl transition-transform duration-200 hover:scale-[1.01]">
+          Connexion
+        </CardTitle>
         <CardDescription className="text-gigconnect-threads-muted">
           Connectez-vous à votre compte GigConnect
         </CardDescription>
@@ -24,12 +26,12 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <div className="space-y-2">
             <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
             <div className="relative">
-              <AtSign className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted" />
+              <AtSign className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted transition-colors duration-200 peer-focus:text-gigconnect-threads-accent" />
               <Input 
                 id="login-email" 
                 type="email" 
                 placeholder="votre@email.com" 
-                className="pl-10"
+                className="auth-input peer"
                 required
               />
             </div>
@@ -38,23 +40,23 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <Label htmlFor="login-password" className="text-sm font-medium">Mot de passe</Label>
-              <a href="#" className="text-xs text-gigconnect-threads-accent hover:underline">
+              <a href="#" className="text-xs text-gigconnect-threads-accent hover:underline transition-colors duration-200">
                 Mot de passe oublié?
               </a>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted" />
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted transition-colors duration-200 peer-focus:text-gigconnect-threads-accent" />
               <Input 
                 id="login-password" 
                 type="password" 
                 placeholder="••••••••" 
-                className="pl-10"
+                className="auth-input peer"
                 required
               />
             </div>
           </div>
           
-          <Button type="submit" className="w-full threads-button">
+          <Button type="submit" className="w-full threads-button transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
             Se connecter
           </Button>
         </form>

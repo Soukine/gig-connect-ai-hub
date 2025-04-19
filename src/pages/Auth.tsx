@@ -8,7 +8,7 @@ const Auth = () => {
     <div className="min-h-screen flex flex-col bg-gigconnect-threads-bg text-gigconnect-threads-text">
       <Navbar />
       
-      <div className="flex-grow flex items-center justify-center p-4">
+      <div className="flex-grow flex items-center justify-center p-4 animate-fade-in">
         <div className="w-full max-w-md">
           <AuthTabs />
         </div>
