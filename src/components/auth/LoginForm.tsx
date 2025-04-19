@@ -13,8 +13,8 @@ interface LoginFormProps {
 const LoginForm = ({ onSubmit }: LoginFormProps) => {
   return (
     <Card className="auth-card">
-      <CardHeader>
-        <CardTitle>Connexion</CardTitle>
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl">Connexion</CardTitle>
         <CardDescription className="text-gigconnect-threads-muted">
           Connectez-vous à votre compte GigConnect
         </CardDescription>
@@ -22,22 +22,22 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="login-email">Email</Label>
+            <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
             <div className="relative">
               <AtSign className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted" />
               <Input 
                 id="login-email" 
                 type="email" 
                 placeholder="votre@email.com" 
-                className="auth-input"
+                className="pl-10"
                 required
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <div className="flex justify-between">
-              <Label htmlFor="login-password">Mot de passe</Label>
+            <div className="flex justify-between items-center">
+              <Label htmlFor="login-password" className="text-sm font-medium">Mot de passe</Label>
               <a href="#" className="text-xs text-gigconnect-threads-accent hover:underline">
                 Mot de passe oublié?
               </a>
@@ -48,7 +48,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                 id="login-password" 
                 type="password" 
                 placeholder="••••••••" 
-                className="auth-input"
+                className="pl-10"
                 required
               />
             </div>
@@ -74,14 +74,14 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <div className="flex gap-3 mt-4">
             <Button 
               variant="outline" 
-              className="auth-social-btn"
+              className="flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80"
             >
               <Github className="h-4 w-4 mr-2" />
               Github
             </Button>
             <Button 
               variant="outline" 
-              className="auth-social-btn"
+              className="flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80"
             >
               <Linkedin className="h-4 w-4 mr-2" />
               LinkedIn

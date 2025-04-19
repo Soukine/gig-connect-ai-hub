@@ -41,9 +41,9 @@ const AuthTabs = () => {
 
   return (
     <Tabs defaultValue="login" className="w-full animate-fade-in">
-      <TabsList className="grid w-full grid-cols-2 mb-8">
-        <TabsTrigger value="login">Connexion</TabsTrigger>
-        <TabsTrigger value="register">Inscription</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-2 mb-6">
+        <TabsTrigger value="login" className="text-sm py-2.5">Connexion</TabsTrigger>
+        <TabsTrigger value="register" className="text-sm py-2.5">Inscription</TabsTrigger>
       </TabsList>
       
       <TabsContent value="login" className="animate-fade-in">

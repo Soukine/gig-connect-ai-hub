@@ -16,8 +16,8 @@ interface RegisterFormProps {
 const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) => {
   return (
     <Card className="auth-card">
-      <CardHeader>
-        <CardTitle>Créer un compte</CardTitle>
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl">Créer un compte</CardTitle>
         <CardDescription className="text-gigconnect-threads-muted">
           Rejoignez GigConnect en quelques étapes simples
         </CardDescription>
@@ -25,13 +25,13 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label>Je m'inscris en tant que</Label>
+            <Label className="text-sm font-medium">Je m'inscris en tant que</Label>
             <RadioGroup 
               defaultValue={userType} 
               onValueChange={setUserType}
               className="flex space-x-1 bg-gigconnect-threads-bg border border-gigconnect-threads-border rounded-md p-1"
             >
-              <div className={`flex-1 text-center rounded-sm py-1 px-2 text-sm ${userType === 'freelancer' ? 'bg-gigconnect-threads-accent text-white' : 'text-gigconnect-threads-muted'}`}>
+              <div className={`flex-1 text-center rounded-sm py-1.5 px-2 text-sm ${userType === 'freelancer' ? 'bg-gigconnect-threads-accent text-white' : 'text-gigconnect-threads-muted'}`}>
                 <RadioGroupItem 
                   value="freelancer" 
                   id="freelancer" 
@@ -41,11 +41,11 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
                   htmlFor="freelancer" 
                   className="flex justify-center items-center cursor-pointer w-full"
                 >
-                  <Briefcase className="h-3.5 w-3.5 mr-1" />
+                  <Briefcase className="h-3.5 w-3.5 mr-1.5" />
                   Freelance
                 </Label>
               </div>
-              <div className={`flex-1 text-center rounded-sm py-1 px-2 text-sm ${userType === 'client' ? 'bg-gigconnect-threads-accent text-white' : 'text-gigconnect-threads-muted'}`}>
+              <div className={`flex-1 text-center rounded-sm py-1.5 px-2 text-sm ${userType === 'client' ? 'bg-gigconnect-threads-accent text-white' : 'text-gigconnect-threads-muted'}`}>
                 <RadioGroupItem 
                   value="client" 
                   id="client" 
@@ -55,7 +55,7 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
                   htmlFor="client" 
                   className="flex justify-center items-center cursor-pointer w-full"
                 >
-                  <User className="h-3.5 w-3.5 mr-1" />
+                  <User className="h-3.5 w-3.5 mr-1.5" />
                   Client
                 </Label>
               </div>
@@ -64,11 +64,11 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
           
           {userType === "freelancer" ? (
             <div className="bg-gigconnect-threads-accent/10 rounded-md p-3 mb-2 border border-gigconnect-threads-accent/20 animate-fade-in">
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-2.5">
                 <CheckCircle className="h-5 w-5 text-gigconnect-threads-accent mt-0.5" />
                 <div className="text-sm">
                   <p className="font-medium">Avantages freelance :</p>
-                  <ul className="text-xs mt-1 space-y-1 text-gigconnect-threads-text/80">
+                  <ul className="mt-1.5 space-y-1 text-xs text-gigconnect-threads-text/80">
                     <li>• Mise en avant de votre portfolio</li>
                     <li>• Accès à des projets pertinents</li>
                     <li>• Paiements sécurisés</li>
@@ -79,11 +79,11 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
             </div>
           ) : (
             <div className="bg-gigconnect-threads-accent/10 rounded-md p-3 mb-2 border border-gigconnect-threads-accent/20 animate-fade-in">
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-2.5">
                 <CheckCircle className="h-5 w-5 text-gigconnect-threads-accent mt-0.5" />
                 <div className="text-sm">
                   <p className="font-medium">Avantages client :</p>
-                  <ul className="text-xs mt-1 space-y-1 text-gigconnect-threads-text/80">
+                  <ul className="mt-1.5 space-y-1 text-xs text-gigconnect-threads-text/80">
                     <li>• Accès à des freelances vérifiés</li>
                     <li>• Système de mise en relation par IA</li>
                     <li>• Protection des paiements</li>
@@ -96,52 +96,52 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="first-name">Prénom</Label>
+              <Label htmlFor="first-name" className="text-sm font-medium">Prénom</Label>
               <Input 
                 id="first-name" 
                 placeholder="Prénom" 
-                className="auth-input pl-3"
+                className="pl-3"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last-name">Nom</Label>
+              <Label htmlFor="last-name" className="text-sm font-medium">Nom</Label>
               <Input 
                 id="last-name" 
                 placeholder="Nom" 
-                className="auth-input pl-3"
+                className="pl-3"
                 required
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="register-email">Email</Label>
+            <Label htmlFor="register-email" className="text-sm font-medium">Email</Label>
             <div className="relative">
               <AtSign className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted" />
               <Input 
                 id="register-email" 
                 type="email" 
                 placeholder="votre@email.com" 
-                className="auth-input"
+                className="pl-10"
                 required
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="register-password">Mot de passe</Label>
+            <Label htmlFor="register-password" className="text-sm font-medium">Mot de passe</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-gigconnect-threads-muted" />
               <Input 
                 id="register-password" 
                 type="password" 
                 placeholder="••••••••" 
-                className="auth-input"
+                className="pl-10"
                 required
               />
             </div>
-            <p className="text-xs text-gigconnect-threads-muted">
+            <p className="text-xs text-gigconnect-threads-muted mt-1">
               Minimum 8 caractères, incluant chiffres et lettres
             </p>
           </div>
@@ -166,28 +166,28 @@ const RegisterForm = ({ onSubmit, userType, setUserType }: RegisterFormProps) =>
           <div className="flex gap-3 mt-4">
             <Button 
               variant="outline" 
-              className="auth-social-btn"
+              className="flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80"
             >
               <Github className="h-4 w-4 mr-2" />
               Github
             </Button>
             <Button 
               variant="outline" 
-              className="auth-social-btn"
+              className="flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80"
             >
               <Linkedin className="h-4 w-4 mr-2" />
               LinkedIn
             </Button>
             <Button 
               variant="outline" 
-              className="auth-social-btn"
+              className="flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80"
             >
               <Facebook className="h-4 w-4 mr-2" />
               Facebook
             </Button>
           </div>
           
-          <p className="text-xs text-gigconnect-threads-muted text-center mt-4">
+          <p className="text-xs text-gigconnect-threads-muted text-center mt-5">
             En vous inscrivant, vous acceptez nos{" "}
             <a href="#" className="text-gigconnect-threads-accent hover:underline">
               Conditions d'utilisation
