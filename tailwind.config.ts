@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,23 +24,26 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Ajout de nouvelles nuances de couleurs plus lumineuses
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
         gigconnect: {
           purple: {
-            DEFAULT: "#9b87f5",  // Purple plus clair
-            dark: "#7E69AB",     // Version plus sombre, mais moins intense
-            light: "#E5DEFF",    // Version très claire pour les backgrounds
+            DEFAULT: "#9b87f5",
+            dark: "#7E69AB",
+            light: "#E5DEFF",
           },
           green: {
-            DEFAULT: "#10B981", 
-            light: "#D1FAE5",    // Version très claire
+            DEFAULT: "#10B981",
+            light: "#D1FAE5",
           },
           navy: {
-            DEFAULT: "#2C3E50",  // Navy moins foncé
-            light: "#34495E",    // Légèrement plus clair
+            DEFAULT: "#2C3E50",
+            light: "#34495E",
           },
           gray: {
-            lightest: "#F9FAFB", 
+            lightest: "#F9FAFB",
             light: "#E5E7EB",
           }
         }
@@ -60,7 +62,6 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        // Nouvelles animations
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" }
