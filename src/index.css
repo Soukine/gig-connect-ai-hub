@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -131,7 +132,7 @@
   }
 }
 
-// Ajouter des animations personnalisées
+/* Ajouter des animations personnalisées */
 @layer utilities {
   .animate-fade-in {
     animation: fadeIn 0.5s ease-out forwards;
