@@ -114,4 +114,83 @@
   .threads-avatar {
     @apply rounded-full border-2 border-border/50;
   }
+  
+  /* Animation classes */
+  .animated-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
+  }
+  
+  .soft-gradient-bg {
+    @apply bg-gradient-to-br from-gigconnect-purple/20 to-gigconnect-green/20;
+  }
+  
+  .smooth-shadow-hover {
+    @apply transition-shadow duration-300 hover:shadow-xl;
+  }
+  
+  .fade-in-section {
+    @apply opacity-0 animate-fade-in;
+  }
+  
+  /* Auth specific classes */
+  .auth-input {
+    @apply bg-gigconnect-threads-bg border-gigconnect-threads-border text-gigconnect-threads-text pl-10 w-full;
+  }
+  
+  .auth-social-btn {
+    @apply flex-1 border-gigconnect-threads-border text-gigconnect-threads-text hover:bg-gigconnect-threads-bg/80;
+  }
+  
+  .auth-card {
+    @apply bg-gigconnect-threads-card border-gigconnect-threads-border shadow-lg transition-all duration-300;
+  }
+}
+
+/* Animations */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulsateSubtle 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from { 
+      opacity: 0; 
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes pulsateSubtle {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
