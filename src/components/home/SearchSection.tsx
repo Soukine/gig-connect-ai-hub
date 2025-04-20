@@ -55,33 +55,33 @@ const SearchSection = () => {
             value="freelance" 
             className="rounded-lg py-2 text-sm data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white flex items-center gap-2 transition-all duration-300"
           >
-            <Users className="h-4 w-4" />
+            <Users className="h-4 w-4 transition-transform group-hover:scale-110" />
             Trouver un Freelance
           </TabsTrigger>
           <TabsTrigger 
             value="project" 
             className="rounded-lg py-2 text-sm data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white flex items-center gap-2 transition-all duration-300"
           >
-            <Briefcase className="h-4 w-4" />
+            <Briefcase className="h-4 w-4 transition-transform group-hover:scale-110" />
             Trouver un Projet
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="freelance" className="p-2">
+        <TabsContent value="freelance" className="p-2 animate-fade-in">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1 group">
+            <div className="relative flex-1 group animate-slide-in-from-left">
               <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300" />
               <input
                 type="text"
                 placeholder="Rechercher une compétence ou un service..."
-                className="landing-input pl-12 w-full h-14 bg-white/5 border border-white/10 rounded-xl text-base transition-all duration-300 focus:border-gigconnect-purple focus:ring-1 focus:ring-gigconnect-purple"
+                className="landing-input pl-12 w-full h-14 bg-white/5 border border-white/10 rounded-xl text-base transition-all duration-300 focus:border-gigconnect-purple focus:ring-1 focus:ring-gigconnect-purple hover:shadow-md"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="relative w-full md:w-56 group">
+            <div className="relative w-full md:w-56 group animate-slide-in-from-right">
               <select 
-                className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base transition-all duration-300 focus:border-gigconnect-purple focus:ring-1 focus:ring-gigconnect-purple cursor-pointer"
+                className="landing-input w-full appearance-none pr-10 h-14 bg-white/5 border border-white/10 rounded-xl text-base transition-all duration-300 focus:border-gigconnect-purple focus:ring-1 focus:ring-gigconnect-purple cursor-pointer hover:shadow-md"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
@@ -92,10 +92,10 @@ const SearchSection = () => {
                 <option value="writing">Rédaction</option>
                 <option value="video">Vidéo & Animation</option>
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple pointer-events-none transition-colors duration-300" />
+              <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple pointer-events-none transition-all duration-300 group-hover:translate-y-[-45%]" />
             </div>
             <Button 
-              className="group bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base transition-all duration-300 hover:shadow-lg hover:shadow-gigconnect-purple/25"
+              className="group bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base transition-all duration-300 hover:shadow-lg hover:shadow-gigconnect-purple/25 animate-slide-in-from-right"
               onClick={() => handleSearch("freelance")}
             >
               <FileSearch className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
@@ -104,7 +104,7 @@ const SearchSection = () => {
           </div>
         </TabsContent>
         
-        <TabsContent value="project" className="p-2">
+        <TabsContent value="project" className="p-2 animate-fade-in">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1 group">
               <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300" />
@@ -127,7 +127,7 @@ const SearchSection = () => {
                 <option value="medium">500€ - 2000€</option>
                 <option value="large">Plus de 2000€</option>
               </select>
-              <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple pointer-events-none transition-colors duration-300" />
+              <ChevronDown className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground group-hover:text-gigconnect-purple pointer-events-none transition-all duration-300" />
             </div>
             <Button 
               className="group bg-gigconnect-purple hover:bg-gigconnect-purple/90 rounded-xl h-14 px-8 text-base transition-all duration-300 hover:shadow-lg hover:shadow-gigconnect-purple/25"
@@ -141,30 +141,30 @@ const SearchSection = () => {
       </Tabs>
       
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-white/10">
-        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105">
+        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105 animate-fade-up">
           <p className="text-3xl font-bold text-gigconnect-purple group-hover:text-gigconnect-darkpurple transition-colors duration-300">
-            <Users className="h-8 w-8 mb-2 mx-auto" />
+            <Users className="h-8 w-8 mb-2 mx-auto animate-pulse-subtle" />
             10k+
           </p>
           <p className="text-sm text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300">Freelances</p>
         </div>
-        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105">
+        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105 animate-fade-up [animation-delay:200ms]">
           <p className="text-3xl font-bold text-gigconnect-purple group-hover:text-gigconnect-darkpurple transition-colors duration-300">
-            <Trophy className="h-8 w-8 mb-2 mx-auto" />
+            <Trophy className="h-8 w-8 mb-2 mx-auto animate-pulse-subtle" />
             5k+
           </p>
           <p className="text-sm text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300">Clients satisfaits</p>
         </div>
-        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105">
+        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105 animate-fade-up [animation-delay:400ms]">
           <p className="text-3xl font-bold text-gigconnect-purple group-hover:text-gigconnect-darkpurple transition-colors duration-300">
-            <Briefcase className="h-8 w-8 mb-2 mx-auto" />
+            <Briefcase className="h-8 w-8 mb-2 mx-auto animate-pulse-subtle" />
             8k+
           </p>
           <p className="text-sm text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300">Projets réalisés</p>
         </div>
-        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105">
+        <div className="text-center group cursor-help transition-all duration-300 hover:scale-105 animate-fade-up [animation-delay:600ms]">
           <p className="text-3xl font-bold text-gigconnect-purple group-hover:text-gigconnect-darkpurple transition-colors duration-300">
-            <Users className="h-8 w-8 mb-2 mx-auto" />
+            <Users className="h-8 w-8 mb-2 mx-auto animate-pulse-subtle" />
             15+
           </p>
           <p className="text-sm text-muted-foreground group-hover:text-gigconnect-purple transition-colors duration-300">Pays</p>
