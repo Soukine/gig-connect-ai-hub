@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -54,14 +53,14 @@ const SearchSection = () => {
         <TabsList className="grid w-full grid-cols-2 mb-6 bg-black/10 dark:bg-white/5 rounded-xl p-1 border border-white/10">
           <TabsTrigger 
             value="freelance" 
-            className="rounded-lg py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base flex items-center gap-2 transition-all duration-300"
+            className="rounded-lg py-2 text-sm data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white flex items-center gap-2 transition-all duration-300"
           >
             <Users className="h-4 w-4" />
             Trouver un Freelance
           </TabsTrigger>
           <TabsTrigger 
             value="project" 
-            className="rounded-lg py-2.5 data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white text-base flex items-center gap-2 transition-all duration-300"
+            className="rounded-lg py-2 text-sm data-[state=active]:bg-white dark:data-[state=active]:bg-gigconnect-purple/20 data-[state=active]:text-gigconnect-purple dark:data-[state=active]:text-white flex items-center gap-2 transition-all duration-300"
           >
             <Briefcase className="h-4 w-4" />
             Trouver un Projet
